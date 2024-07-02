@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Socios</title>
+    <link rel="stylesheet" href="./static/css/estilos.css">
+    <link rel="shortcut icon" href="./static/imagenes/favicon.ico" type="icon">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-index ">
+            <img class="logo-nav" src="./static/imagenes/logo.png" alt="logo"><link rel="shortcut icon" href="./static/imagenes/favicon.ico" type="icon">
+        </head>
+        
+        <body>
+            <header>
+                <nav class="navbar-index ">
+                    <img class="logo-nav" src="./static/imagenes/logo.png" alt="logo">
+                </nav>
+            </header>
+        
+            <div class="logo-centrado">
+                <img src="./static/imagenes/logo.jpg" alt="logo">
+        </nav>
+    </header>
+
+    <div class="logo-centrado">
+        <img src="./static/imagenes/logo.jpg" alt="logo">
+    </div>
+    <h1>Eliminar Socios</h1><br>
+
+    <table id="socios-table"> 
+        <thead> <!--Encabezado de la tabla.-->
+            <tr>
+                <th>Código</th>
+                <th>Documento</th>
+                <th>Nombre</th>                
+                <th>Teléfono</th>
+                <th>Mail</th>
+                <th>Dirección</th>
+                <th>Foto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+
+    <div class="contenedor-centrado">
+        <a href="index.html">Menu principal</a>
+    </div>
+    <script>
+        const URL = "https://KariT.pythonanywhere.com/"
+        //const URL = "http://127.0.0.1:5000/"
+
+        
+        // Obtiene el contenido del inventario
+        function obtenerSocios() {
+            fetch(URL + 'socios') // Realiza una solicitud GET al servidor 
+                .then(response => {
+                    // Si es exitosa (response.ok), convierte los datos de la respuesta de formato JSON a un objeto JavaScript.
+                    if (response.ok) { return response.json(); }
+                })
+                
+                .then(data => {
+                    const sociosTable = document.getElementById('socios-table').getElementsByTagName('tbody')[0];
+                    sociosTable.innerHTML = ''; 
+                    data.forEach(socios => {
+                        const row = sociosTable.insertRow();
+                        row.innerHTML = `
+                            <td>${socio.codigo}</td>
+                            <td>${socio.documento}</td>
+                            <td>${socio.nombre}</td>
+                            <td>${socio.telefono}</td>
+                            <td>${socio.mail}</td>
+                            <td>${socio.direccion}</td>
+                            <td><button onclick="eliminarSocio('${socio.codigo}')">Eliminar</button></td>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                    alert('Error al obtener los socios.');
+                });
+        }
+
+        
+        function eliminarSocio(codigo) {
+            if (confirm('¿Estás seguro de que quieres eliminar este socio?')) {
+                fetch(URL + `socios/${codigo}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) {
+                            
+                            obtenerSocios(); 
+                            alert('Socio eliminado correctamente.');
+                        }
+                    })
+                    
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            }
+        }
+
+       
+        document.addEventListener('DOMContentLoaded', obtenerSocios);
+    </script>
+</body>
+</html>
+

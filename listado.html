@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Socios</title>
+    <link rel="stylesheet" href="./static/css/estilos.css">
+    <link rel="shortcut icon" href="./static/imagenes/favicon.ico" type="icon">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-index ">
+            <img class="logo-nav" src="./static/imagenes/logo.png" alt="logo">
+        </nav>
+    </header>
+
+    <div class="logo-centrado">
+        <img src="./static/imagenes/logo.jpg" alt="logo">
+    </div>
+    <h1>Listado de Socios</h1><br>
+
+    <table> 
+        <thead> <!--Encabezado de la tabla con columnas.-->
+            <tr>
+                <th>Código</th>
+                <th>Documento</th>
+                <th>Nombre</th>                
+                <th>Teléfono</th>
+                <th>Mail</th>
+                <th>Dirección</th>
+                <th>Foto</th>
+                                
+            </tr>
+        </thead>
+        <tbody id="tablaSocios"> </tbody>
+    </table><br>
+
+    <div class="contenedor-centrado">
+        <a href="index.html">Menu principal</a>
+    </div>
+
+
+    <script>
+       
+        const URL = "https://KariT.pythonanywhere.com/"
+        //const URL = "http://127.0.0.1:5000/"
+
+        fetch(URL + 'socios')
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json(); 
+            } else {
+                    
+                    throw new Error('Error al obtener los socios.');
+                }
+            })
+
+            
+            .then(function (data) {
+                let tablaSocios = 
+                document.getElementById('tablaSocios');
+                for (let socio of data) {
+                    let fila = document.createElement('tr'); 
+                    fila.innerHTML = '<td>' + socio.codigo + '</td>' +
+                        '<td>' + socio.documento + '</td>' +
+                        '<td align="right">' + socio.nombre + '</td>' +
+                        '<td align="right">' + socio.telefono + '</td>' +
+                        '<td align="right">' + socio.mail + '</td>' +
+                        '<td align="right">' + socio.direccion + '</td>' +
+                        //'<td><img src=./static/imagenes/' + socio.foto_url +'alt="foto de perfil" style="width: 100px;"></td>'; 
+                        
+                        '<td><img src=https://www.pythonanywhere.com/user/KariT/files/home/KariT/mysite/static/imagenes/' + socio.imagen_url +' alt="Imagen del socio" style="width: 100px;"></td>';
+                        
+                        
+                    tablaSocios.appendChild(fila);
+                }
+            })
+
+            
+            .catch(function (error) {
+                // Código para manejar errores
+                alert('Error al obtener los socios.');
+            });
+    </script>
+</body>
+</html>
+
